@@ -16,13 +16,13 @@ on:
         required: true
         type: choice
         options:
-          - calendar4
           - sessions4
-        default: calendar4
-      target_fraction:
-        description: "Profit target as fraction of theoretical maximum"
+          - calendar4
+        default: sessions4
+      flatline_tolerance:
+        description: "Flatline return tolerance as fraction of bump height"
         required: true
-        default: "0.95"
+        default: "0.05"
       lot_size:
         description: "Historical NIFTY lot size; 0 outputs point P&L only"
         required: true
@@ -71,7 +71,7 @@ jobs:
           --start "${{ inputs.start }}"
           --end "${{ inputs.end }}"
           --dte-mode "${{ inputs.dte_mode }}"
-          --target-fraction "${{ inputs.target_fraction }}"
+          --flatline-tolerance "${{ inputs.flatline_tolerance }}"
           --lot-size "${{ inputs.lot_size }}"
           --brokerage "${{ inputs.brokerage }}"
           --exchange-rate "${{ inputs.exchange_rate }}"
