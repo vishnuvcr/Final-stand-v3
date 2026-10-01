@@ -29,6 +29,11 @@ def test_calendar4_target_exit_smoke(tmp_path: Path):
                         price = {80: 10.0, 75: 4.0, 70: 2.0}.get(strike, 1.0)
                     else:
                         price = {120: 2.0, 125: 1.0, 130: 0.4}.get(strike, 1.0)
+                elif ts.date() == date(2025, 8, 28):
+                    if opt == "PE":
+                        price = {80: 6.0, 75: 4.0, 70: 2.0}.get(strike, 1.0)
+                    else:
+                        price = {120: 1.0, 125: 1.0, 130: 0.4}.get(strike, 1.0)
                 elif ts.date() == date(2025, 8, 29):
                     if opt == "PE":
                         price = {80: 16.0, 75: 4.0, 70: 2.0}.get(strike, 1.0)
@@ -78,5 +83,5 @@ def test_calendar4_target_exit_smoke(tmp_path: Path):
             cfg,
         )
         assert len(trades) == 1
-        assert trades.iloc[0]["exit_reason"] == "flatline_return"
+        assert trades.iloc[0]["exit_reason"] == "flatline_proximity"
         assert trades.iloc[0]["entry_date"] == "2025-08-29"
