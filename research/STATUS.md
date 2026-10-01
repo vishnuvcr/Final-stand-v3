@@ -2,15 +2,19 @@
 
 | Phase | Status | Latest update |
 |---|---|---|
-| 1. Definition + data-source validation | IN PROGRESS | Strategy ambiguity documented; NIFTY working assumption recorded; intraday data requirement confirmed |
-| 2. Data acquisition + validation | NOT STARTED | |
-| 3. Backtest engine + costs | NOT STARTED | |
+| 1. Definition + data-source validation | COMPLETE | Payoff, DTE regimes, data sources and cost-model requirements frozen |
+| 2. Data acquisition + validation | IN PROGRESS | HF acquisition, caching, synthetic tests and manual workflow implemented; empirical run still pending |
+| 3. Backtest engine + costs | IMPLEMENTED / VALIDATION PENDING | Event-driven engine with slippage and cost hooks is on phase-2-data-backtest |
 | 4. Strategy 1 | NOT STARTED | |
 | 5. Strategy 2 | NOT STARTED | |
 | 6. Robustness | NOT STARTED | |
 | 7. Manuscript | NOT STARTED | |
 
-## Latest findings
-- With equal strike spacing, the 1:-1:-1 structure has a finite expiry maximum-profit plateau between the two short strikes.
-- “Close to the flatline” is threshold-dependent; 90%, 95% and 100% of theoretical plateau profit are designated sensitivity cases.
-- Minute-level option data is required for the requested early-exit rule.
+## Current result
+No numeric historical performance is claimed yet. The current runtime cannot execute the licensed parquet download or dispatch GitHub Actions.
+
+## Phase 1 findings
+- Equal-spaced 1:-1:-1 ratio structures have a maximum-profit plateau between the two short strikes.
+- The adverse tail is unbounded.
+- Target threshold is parameterized rather than silently chosen.
+- NIFTY weekly expiry changed from Thursday to Tuesday in 2025; DTE regimes are handled separately.
