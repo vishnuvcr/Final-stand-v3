@@ -1,51 +1,54 @@
 name: Phase 2 - NIFTY ratio backtest
 
 on:
+  push:
+    branches: [phase-2-data-backtest]
   workflow_dispatch:
     inputs:
       start:
-        description: "First expiry date to include (YYYY-MM-DD)"
+        description: "First expiry date to include"
         required: true
-        default: "2025-08-29"
+        default: "2025-09-02"
       end:
-        description: "Last expiry date to include (YYYY-MM-DD)"
+        description: "Last expiry date to include"
         required: true
-        default: "2026-09-30"
+        default: "2026-08-04"
       dte_mode:
         description: "DTE interpretation"
         required: true
         type: choice
-        options:
-          - sessions4
-          - calendar4
+        options: [sessions4, calendar4]
         default: sessions4
       flatline_tolerance:
-        description: "Flatline return tolerance as fraction of bump height"
+        description: "Flatline tolerance as fraction of bump height"
         required: true
         default: "0.05"
       lot_size:
-        description: "Historical NIFTY lot size; 0 outputs point P&L only"
+        description: "0 = historical NIFTY lot size"
         required: true
         default: "0"
       brokerage:
         description: "Paytm Money brokerage per executed order"
         required: true
         default: "10"
-      exchange_rate:
-        description: "Exchange turnover rate as decimal"
+      slippage_points:
+        description: "Adverse slippage per leg in option points"
         required: true
-      sebi_rate:
-        description: "SEBI turnover rate as decimal"
-        required: true
-      stamp_rate:
-        description: "Stamp duty rate on buy premium as decimal"
-        required: true
+        default: "0.05"
 
 jobs:
   backtest:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    env:
+      START: ${{ inputs.start || '2025-09-02' }}
+      END: ${{ inputs.end || '2026-08-04' }}
+      DTE_MODE: ${{ inputs.dte_mode || 'sessions4' }}
+      TOLERANCE: ${{ inputs.flatline_tolerance || '0.05' }}
+      LOT_SIZE: ${{ inputs.lot_size || '0' }}
+      BROKERAGE: ${{ inputs.brokerage || '10' }}
+      SLIPPAGE: ${{ inputs.slippage_points || '0.05' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -55,28 +58,31 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
-          key: hf-nifty-options-1m-${{ inputs.start }}-${{ inputs.end }}
+          key: hf-nifty-options-1m-${{ env.START }}-${{ env.END }}
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Download selected NIFTY data
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: python scripts/acquire_hf.py --start "${{ inputs.start }}" --end "${{ inputs.end }}" --out data/raw
+        run: python scripts/acquire_hf.py --start "${START}" --end "${END}" --out data/raw
       - name: Run tests
         run: pytest -q
       - name: Run backtest
         run: >-
           python scripts/run_backtest.py
           --data data/raw
-          --start "${{ inputs.start }}"
-          --end "${{ inputs.end }}"
-          --dte-mode "${{ inputs.dte_mode }}"
-          --flatline-tolerance "${{ inputs.flatline_tolerance }}"
-          --lot-size "${{ inputs.lot_size }}"
-          --brokerage "${{ inputs.brokerage }}"
-          --exchange-rate "${{ inputs.exchange_rate }}"
-          --sebi-rate "${{ inputs.sebi_rate }}"
-          --stamp-rate "${{ inputs.stamp_rate }}"
+          --start "${START}"
+          --end "${END}"
+          --dte-mode "${DTE_MODE}"
+          --flatline-tolerance "${TOLERANCE}"
+          --lot-size "${LOT_SIZE}"
+          --brokerage "${BROKERAGE}"
+          --stt 0.001
+          --exchange-rate 0.0003553
+          --sebi-rate 0.000001
+          --stamp-rate 0.00003
+          --gst-rate 0.18
+          --slippage-points "${SLIPPAGE}"
           --out artifacts
       - uses: actions/upload-artifact@v4
         with:
