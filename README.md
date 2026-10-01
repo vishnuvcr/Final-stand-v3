@@ -41,3 +41,6 @@ Because the underlying was not specified, the implementation assumes NIFTY weekl
 
 ## User-confirmed correction
 For a Tuesday expiry, 4 DTE means **Wednesday 10:00 IST**, counting four trading sessions to Tuesday expiry. The early exit is triggered only after P&L has entered the profit bump and then returns close to the horizontal expiry-payoff flatline. The position is otherwise held to expiry.
+
+## Latest user-confirmed exit rule
+At any time after entry and before expiry day, if the live combined strategy P&L is sufficiently close to the calculated expiry-payoff flatline, exit immediately. The trade does not need to have previously moved toward or into the profit bump. If no qualifying flatline-proximity observation occurs, exit at expiry.
