@@ -2,8 +2,6 @@ name: Phase 6 - slippage robustness
 
 on:
   workflow_dispatch:
-  push:
-    branches: [phase-2-data-backtest]
 
 jobs:
   slippage:
