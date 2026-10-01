@@ -278,15 +278,26 @@ def write_summary(trades: pd.DataFrame, out_json: Path) -> None:
     if trades.empty:
         payload = {"trades": 0}
     else:
+        wins = trades.loc[trades["net_pnl_rupees"] > 0, "net_pnl_rupees"]
+        losses = trades.loc[trades["net_pnl_rupees"] < 0, "net_pnl_rupees"]
+        ordered = trades.sort_values("entry_date").copy()
+        ordered["cum_net_rupees"] = ordered["net_pnl_rupees"].cumsum()
+        ordered["peak_net_rupees"] = ordered["cum_net_rupees"].cummax()
+        ordered["drawdown_rupees"] = ordered["cum_net_rupees"] - ordered["peak_net_rupees"]
         payload = {
             "trades": int(len(trades)),
-            "win_rate_gross": float((trades["gross_pnl_points"] > 0).mean()),
-            "mean_gross_pnl_points": float(trades["gross_pnl_points"].mean()),
-            "median_gross_pnl_points": float(trades["gross_pnl_points"].median()),
-            "sum_gross_pnl_points": float(trades["gross_pnl_points"].sum()),
-            "target_hit_rate": float((trades["exit_reason"] == "profit_target").mean()),
+            "win_rate_net": float((trades["net_pnl_rupees"] > 0).mean()),
+            "mean_net_pnl_rupees": float(trades["net_pnl_rupees"].mean()),
+            "median_net_pnl_rupees": float(trades["net_pnl_rupees"].median()),
+            "sum_net_pnl_rupees": float(trades["net_pnl_rupees"].sum()),
+            "total_cost_rupees": float(trades["cost_rupees"].sum()),
+            "profit_factor_net": float(wins.sum() / abs(losses.sum())) if len(losses) else None,
+            "max_drawdown_rupees": float(ordered["drawdown_rupees"].min()),
+            "max_loss_rupees": float(trades["net_pnl_rupees"].min()),
+            "max_win_rupees": float(trades["net_pnl_rupees"].max()),
+            "flatline_exit_rate": float((trades["exit_reason"] == "flatline_proximity").mean()),
             "expiry_exit_rate": float((trades["exit_reason"] == "expiry").mean()),
-            "max_loss_points": float(trades["gross_pnl_points"].min()),
-            "max_win_points": float(trades["gross_pnl_points"].max()),
+            "mean_gross_pnl_points": float(trades["gross_pnl_points"].mean()),
+            "sum_gross_pnl_points": float(trades["gross_pnl_points"].sum()),
         }
     out_json.write_text(json.dumps(payload, indent=2))
