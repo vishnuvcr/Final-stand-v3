@@ -179,27 +179,22 @@ def run_backtest(
                 exit_exec = path_prices[strike] - adjustment if sign == 1 else path_prices[strike] + adjustment
                 pnl += sign * (exit_exec - entry_exec[strike])
 
-            # Exit only after the trade has first moved into the bump,
-            # then returned to the flatline tolerance band. Never trigger
-            # this early exit on expiry day.
-            pre_expiry = path_prices[path_prices.index.date < expiry]
-            if bump_height > 0 and not pre_expiry.empty:
-                above_band = pnl > (flatline + tolerance_points)
-                if above_band.any():
-                    first_bump_ts = above_band[above_band].index[0]
-                    return_band = pnl.loc[first_bump_ts:]
-                    return_band = return_band[
-                        (return_band.index.date < expiry) &
-                        (return_band <= (flatline + tolerance_points))
-                    ]
-                else:
-                    return_band = pd.Series(dtype=float)
+            # Early exit: at any time before expiry day, if live P&L is
+            # close to the expiry-payoff flatline, exit immediately.
+            # There is NO requirement that the trade first enters the bump.
+            # This condition is evaluated from the first post-entry bar.
+            pre_expiry_pnl = pnl[pnl.index.date < expiry]
+            if bump_height > 0 and not pre_expiry_pnl.empty:
+                return_band = pre_expiry_pnl[
+                    (pre_expiry_pnl >= (flatline - tolerance_points)) &
+                    (pre_expiry_pnl <= (flatline + tolerance_points))
+                ]
             else:
                 return_band = pd.Series(dtype=float)
 
             if not return_band.empty:
                 exit_ts = return_band.index[0]
-                exit_reason = "flatline_return"
+                exit_reason = "flatline_proximity"
             else:
                 expiry_rows = path_prices[path_prices.index.date == expiry]
                 if expiry_rows.empty:
