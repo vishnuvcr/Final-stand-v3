@@ -222,8 +222,9 @@ def run_backtest(
                 exit_exec[strike] = xp[strike] - adjustment if sign == 1 else xp[strike] + adjustment
             gross_points = float(pnl.loc[exit_ts])
 
+            effective_lot_size = historical_nifty_lot_size(expiry) if lot_size in (None, 0) else lot_size
             cost_rupees = 0.0
-            if lot_size is not None:
+            if effective_lot_size is not None:
                 dated_cfg = CostConfig(
                 brokerage_per_order=cost_config.brokerage_per_order,
                 stt_on_sell_premium_rate=historical_stt_rate(exit_ts.date()),
@@ -233,7 +234,7 @@ def run_backtest(
                 gst_rate=cost_config.gst_rate,
                 slippage_points_per_leg=cost_config.slippage_points_per_leg,
             )
-            cost_rupees = _turnover_and_costs(entry_exec, exit_exec, legs, lot_size, dated_cfg)
+            cost_rupees = _turnover_and_costs(entry_exec, exit_exec, legs, effective_lot_size, dated_cfg)
             net_points = gross_points - (cost_rupees / lot_size if lot_size else 0.0)
 
             trades.append({
@@ -257,8 +258,10 @@ def run_backtest(
                 "flatline_tolerance_points": tolerance_points,
                 "gross_pnl_points": gross_points,
                 "net_pnl_points": net_points,
+                "gross_pnl_rupees": gross_points * effective_lot_size,
+                "net_pnl_rupees": net_points * effective_lot_size,
                 "cost_rupees": cost_rupees,
-                "lot_size": lot_size,
+                "lot_size": effective_lot_size,
                 "holding_minutes": int((exit_ts - entry_ts).total_seconds() // 60),
                 "data_file": str(path),
             })
