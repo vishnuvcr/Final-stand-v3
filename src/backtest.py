@@ -158,17 +158,22 @@ def run_backtest(
             entry_ts = entry_rows.index[0]
             ep = {k: float(prices.loc[entry_ts, k]) for k in leg_strikes}
 
-            max_profit = strategy.max_profit_points(ep, legs)
-            target = strategy.target_points(ep, legs, target_fraction)
-            path_prices = prices.loc[entry_ts:].copy()
-            entry_adj = {}
+            # Executed entry prices: adverse slippage for each leg.
+            entry_exec = {}
             for strike, sign in legs:
                 adjustment = cost_config.slippage_points_per_leg
-                entry_adj[strike] = ep[strike] + (adjustment if sign == 1 else -adjustment)
+                entry_exec[strike] = ep[strike] + (adjustment if sign == 1 else -adjustment)
 
+            max_profit = strategy.max_profit_points(entry_exec, legs)
+            target = strategy.target_points(entry_exec, legs, target_fraction)
+            path_prices = prices.loc[entry_ts:].copy()
+
+            # Target detection uses executable exit prices at each minute close.
             pnl = pd.Series(0.0, index=path_prices.index)
             for strike, sign in legs:
-                pnl += sign * (path_prices[strike] - entry_adj[strike])
+                adjustment = cost_config.slippage_points_per_leg
+                exit_exec = path_prices[strike] - adjustment if sign == 1 else path_prices[strike] + adjustment
+                pnl += sign * (exit_exec - entry_exec[strike])
             target_hit = pnl[pnl >= target] if max_profit > 0 else pd.Series(dtype=float)
 
             if not target_hit.empty:
@@ -186,11 +191,15 @@ def run_backtest(
                     pnl += sign * (path_prices[strike] - entry_adj[strike])
 
             xp = {k: float(path_prices.loc[exit_ts, k]) for k in leg_strikes}
+            exit_exec = {}
+            for strike, sign in legs:
+                adjustment = cost_config.slippage_points_per_leg
+                exit_exec[strike] = xp[strike] - adjustment if sign == 1 else xp[strike] + adjustment
             gross_points = float(pnl.loc[exit_ts])
 
             cost_rupees = 0.0
             if lot_size is not None:
-                cost_rupees = _turnover_and_costs(ep, xp, legs, lot_size, cost_config)
+                cost_rupees = _turnover_and_costs(entry_exec, exit_exec, legs, lot_size, cost_config)
             net_points = gross_points - (cost_rupees / lot_size if lot_size else 0.0)
 
             trades.append({
