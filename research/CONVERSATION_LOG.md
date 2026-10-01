@@ -20,3 +20,8 @@ Formal payoff, expiry regimes, data source candidates and cost-model requirement
 
 ## Phase 2 progress
 Implemented the data acquisition script, deterministic backtest engine, payoff tests, synthetic smoke test, and manual workflow. The current runtime could not execute the external parquet download; this is logged rather than replaced with fabricated data.
+
+## 2026-10-01 — User correction from payoff screenshot
+User clarified that 4 DTE means four trading sessions. For Tuesday expiry, entry is Wednesday at 10:00 IST. User also clarified that the early exit is triggered when live P&L comes back close to the horizontal flatline of the expiry payoff, not when it reaches a percentage of maximum profit.
+
+The uploaded payoff screenshot was used to confirm the intended geometry: horizontal flatline, finite profit bump/plateau, and unlimited adverse tail. The actual backtest will calculate the flatline from entry premiums rather than reading pixel values from the screenshot.
