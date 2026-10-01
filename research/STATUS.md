@@ -25,3 +25,6 @@ Primary entry is four trading sessions before expiry. Early exit is the first fl
 
 ## Latest correction
 The prior-bump requirement was removed. The event engine now scans from the first post-entry bar for the flatline-proximity condition.
+
+## Phase 2 execution launch
+Automatic execution has been enabled on pushes to the phase-2-data-backtest branch. The workflow uses the HF_TOKEN secret, caches the selected 1-minute dataset, applies the historical NIFTY lot-size regime, dated STT, NSE transaction charges, SEBI fee, stamp duty, GST, Paytm Money brokerage and non-zero slippage.
