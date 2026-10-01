@@ -33,7 +33,7 @@ def test_sessions4_flatline_exit_smoke(tmp_path: Path):
                     if opt == "PE":
                         price = {80: 6.0, 75: 4.0, 70: 2.0}.get(strike, 1.0)
                     else:
-                        price = {120: 1.0, 125: 1.0, 130: 0.4}.get(strike, 1.0)
+                        price = {120: 1.4, 125: 1.0, 130: 0.4}.get(strike, 1.0)
                 elif ts.date() == date(2025, 8, 29):
                     if opt == "PE":
                         price = {80: 16.0, 75: 4.0, 70: 2.0}.get(strike, 1.0)
@@ -53,7 +53,7 @@ def test_sessions4_flatline_exit_smoke(tmp_path: Path):
 
     spot_path = tmp_path / "NIFTY.parquet"
     pd.DataFrame([{
-        "timestamp": datetime(2025, 8, 29, 10, 0),
+        "timestamp": datetime(2025, 8, 27, 10, 0),
         "trading_day": entry,
         "close": 100.0,
     }]).to_parquet(spot_path, index=False)
@@ -77,11 +77,11 @@ def test_sessions4_flatline_exit_smoke(tmp_path: Path):
             strategy,
             date(2025, 8, 1),
             expiry,
-            "calendar4",
+            "sessions4",
             0.05,
             None,
             cfg,
         )
         assert len(trades) == 1
         assert trades.iloc[0]["exit_reason"] == "flatline_proximity"
-        assert trades.iloc[0]["entry_date"] == "2025-08-29"
+        assert trades.iloc[0]["entry_date"] == "2025-08-27"
