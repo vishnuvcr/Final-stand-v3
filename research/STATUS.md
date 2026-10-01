@@ -21,4 +21,7 @@ NSE confirms current NIFTY weekly expiry is Tuesday and the 2025 transition must
 The reproducible acquisition/backtest workflow is implemented. No empirical trade results are claimed yet because the current execution environment cannot download the licensed parquet dataset or dispatch the repository workflow.
 
 ## Latest correction
-Primary entry is four trading sessions before expiry. Early exit requires the trade to first move above the flatline tolerance band and then return into that band before expiry day. No early exit is permitted on expiry day.
+Primary entry is four trading sessions before expiry. Early exit is the first flatline-proximity hit at any time after entry and before expiry day; no prior bump movement is required. No early exit is permitted on expiry day.
+
+## Latest correction
+The prior-bump requirement was removed. The event engine now scans from the first post-entry bar for the flatline-proximity condition.
