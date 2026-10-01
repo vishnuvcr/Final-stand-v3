@@ -8,6 +8,19 @@ import pandas as pd
 
 from src.strategy import RatioStrategy
 
+def historical_nifty_lot_size(expiry: date) -> int:
+    # NSE Circular FAOP70616: weekly/monthly NIFTY contracts retained lot 75
+    # through 23-Dec-2025; first revised weekly lot 65 was 06-Jan-2026.
+    if expiry <= date(2025, 12, 23):
+        return 75
+    if expiry >= date(2026, 1, 6):
+        return 65
+    raise ValueError(f"No NIFTY weekly lot-size regime defined for expiry {expiry}")
+    
+def historical_stt_rate(trade_date: date) -> float:
+    # NSE current levy table: 0.10% through 31-Mar-2026; 0.15% from 01-Apr-2026.
+    return 0.001 if trade_date < date(2026, 4, 1) else 0.0015
+
 
 @dataclass(frozen=True)
 class CostConfig:
@@ -211,7 +224,16 @@ def run_backtest(
 
             cost_rupees = 0.0
             if lot_size is not None:
-                cost_rupees = _turnover_and_costs(entry_exec, exit_exec, legs, lot_size, cost_config)
+                dated_cfg = CostConfig(
+                brokerage_per_order=cost_config.brokerage_per_order,
+                stt_on_sell_premium_rate=historical_stt_rate(exit_ts.date()),
+                exchange_turnover_rate=cost_config.exchange_turnover_rate,
+                sebi_turnover_rate=cost_config.sebi_turnover_rate,
+                stamp_duty_on_buy_premium_rate=cost_config.stamp_duty_on_buy_premium_rate,
+                gst_rate=cost_config.gst_rate,
+                slippage_points_per_leg=cost_config.slippage_points_per_leg,
+            )
+            cost_rupees = _turnover_and_costs(entry_exec, exit_exec, legs, lot_size, dated_cfg)
             net_points = gross_points - (cost_rupees / lot_size if lot_size else 0.0)
 
             trades.append({
