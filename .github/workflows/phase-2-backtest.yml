@@ -1,8 +1,6 @@
 name: Phase 2 - NIFTY ratio backtest
 
 on:
-  push:
-    branches: [phase-2-data-backtest]
   workflow_dispatch:
     inputs:
       start:
