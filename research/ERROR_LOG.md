@@ -11,3 +11,9 @@
 | 2026-10-01 | Strategy-definition correction | Previous implementation treated 4 DTE as four calendar days and targeted a fraction of maximum profit | This did not match the user's intended Wednesday entry for Tuesday expiry or the uploaded payoff-chart exit concept | Replaced with four-trading-session DTE and return-to-flatline exit; added tolerance sensitivity and regression test |
 
 | 2026-10-01 | Flatline-exit correction | Previous engine required the P&L to first move into the bump before a flatline exit | That was not part of the user's rule | Removed the prior-bump requirement; the first flatline-proximity hit at any time before expiry day is now the exit |
+
+| 2026-10-01 | Synthetic DTE fixture | Four-session test initially omitted Monday between Wednesday entry and Tuesday expiry | Test falsely appeared to reject a valid 4-DTE entry | Added the full Wednesday-Thursday-Friday-Monday-Tuesday sequence |
+| 2026-10-01 | CI metadata validation | Metadata-only parquet read was passed through full timestamp validator | Smoke test failed before strategy logic | Separated metadata normalization from full-bar normalization |
+| 2026-10-01 | NIFTY lot-size boundary | Old 75-lot regime was initially stopped at 23-Dec-2025 | 30-Dec-2025 expiry failed the cost model | Extended 75-lot regime through 30-Dec-2025; 65 from 06-Jan-2026 |
+| 2026-10-01 | Data coverage | Executed spot/option sample produced no qualifying trades after 26-May-2026 despite later-dated source files existing | Full requested date range could not be claimed | Report the empirical sample through 26-May-2026 and exclude later dates pending a coverage audit |
+| 2026-10-01 | Summary metric | Old summary still called the exit statistic target_hit_rate | It reported zero even though flatline exits occurred | Replaced with flatline_exit_rate |
