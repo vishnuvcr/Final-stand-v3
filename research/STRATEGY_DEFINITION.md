@@ -16,64 +16,54 @@ OTM4/OTM5/OTM6 means the 4th, 5th and 6th OTM listed strikes from the 10:00 ATM 
 
 ## Entry
 
-Entry is at **10:00 IST, exactly 4 trading sessions before expiry**.
+Entry is at 10:00 IST, exactly 4 trading sessions before expiry.
 
 For a Tuesday weekly expiry:
-- Wednesday = 4 DTE
-- Thursday = 3 DTE
-- Friday = 2 DTE
-- Monday = 1 DTE
-- Tuesday = expiry
-
-Therefore the primary entry day for a Tuesday expiry is Wednesday.
+Wednesday = 4 DTE -> Thursday = 3 DTE -> Friday = 2 DTE -> Monday = 1 DTE -> Tuesday = expiry.
 
 ## Payoff geometry
 
-For equal strike spacing, the 1:-1:-1 ratio structure has a horizontal expiry-payoff flatline, a finite profit bump/plateau between the short strikes, and an unbounded adverse tail.
-
-For the put structure, with K4 > K5 > K6:
-- S >= K4: flatline
-- K5 <= S < K4: rising profit segment
-- K6 <= S < K5: maximum-profit plateau
-- S < K6: adverse unbounded tail
-
-For the call structure, the geometry is mirrored.
+The 1:-1:-1 ratio structure has a horizontal expiry-payoff flatline, a finite profit bump/plateau between the short strikes, and an unbounded adverse tail.
 
 ## Flatline value
 
-Let the entry net premium cashflow be:
+Let C0 be the net entry premium cashflow:
 
 C0 = long premium - short premium(K5) - short premium(K6)
 
-Then the expiry flatline P&L is:
+Expiry flatline P&L = -C0.
 
-Flatline = -C0
-
-The maximum plateau P&L is:
+For equal strike spacing d:
 
 MaxProfit = d - C0
 
-The bump height above the flatline is therefore d for equally spaced strikes.
+Bump height = MaxProfit - Flatline = d.
 
-## Corrected early-exit rule
+## Correct early-exit rule
 
-The user does **not** want the earlier 90/95/100% maximum-profit target.
+The user has clarified that the trade **does not need to move toward or into the bump first**.
 
-The intended rule is:
+At any time after entry and before expiry day:
 
-> After entry, monitor the live marked P&L. If the P&L comes back close to the horizontal flatline P&L shown by the expiry payoff chart, exit before expiry. If this condition is not reached, exit at 0 DTE/expiry.
+1. Calculate current combined strategy P&L using executable/adverse-slippage marks.
+2. Compare it directly with the expiry-payoff flatline.
+3. If the live P&L is sufficiently close to the flatline, exit immediately.
+4. The first qualifying timestamp is the exit.
+5. If no qualifying timestamp occurs before expiry day, hold to expiry.
 
-The exact meaning of "close to" is parameterized because the screenshot does not specify a numerical tolerance.
+There is **no prior-profit, bump-entry, or reversion requirement**.
 
-The backtest will report:
-- 2% of bump height
-- 5% of bump height
-- 10% of bump height
+For flatline F and bump height H, with tolerance fraction T:
 
-For flatline F and bump height H = MaxProfit - F, the early-exit condition is:
+abs(LivePnL - F) <= T * H
 
-abs(LivePnL - F) <= tolerance * H
+The tolerance sensitivity remains:
+- 2%
+- 5%
+- 10%
 
-The early exit is only eligible before expiry day. Once expiry day is reached, the expiry rule takes precedence.
+The 5% case is a descriptive reference, not an optimized historical choice.
 
-This is a path-dependent exit and is distinct from taking profit near maximum profit.
+## Expiry rule
+
+The flatline-proximity early exit is not applied on expiry day. If no earlier qualifying timestamp exists, the position exits at the final tradable observation on expiry day.
