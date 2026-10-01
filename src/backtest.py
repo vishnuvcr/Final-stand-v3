@@ -160,20 +160,16 @@ def run_backtest(
 
             max_profit = strategy.max_profit_points(ep, legs)
             target = strategy.target_points(ep, legs, target_fraction)
+            path_prices = prices.loc[entry_ts:].copy()
+            entry_adj = {}
+            for strike, sign in legs:
+                adjustment = cost_config.slippage_points_per_leg
+                entry_adj[strike] = ep[strike] + (adjustment if sign == 1 else -adjustment)
 
-            if max_profit <= 0:
-                target_hit = pd.Series(dtype=float)
-            else:
-                path_prices = prices.loc[entry_ts:].copy()
-                entry_adj = {}
-                for strike, sign in legs:
-                    adjustment = cfg_slip = cost_config.slippage_points_per_leg
-                    entry_adj[strike] = ep[strike] + (adjustment if sign == 1 else -adjustment)
-
-                pnl = pd.Series(0.0, index=path_prices.index)
-                for strike, sign in legs:
-                    pnl += sign * (path_prices[strike] - entry_adj[strike])
-                target_hit = pnl[pnl >= target]
+            pnl = pd.Series(0.0, index=path_prices.index)
+            for strike, sign in legs:
+                pnl += sign * (path_prices[strike] - entry_adj[strike])
+            target_hit = pnl[pnl >= target] if max_profit > 0 else pd.Series(dtype=float)
 
             if not target_hit.empty:
                 exit_ts = target_hit.index[0]
