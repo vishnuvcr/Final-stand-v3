@@ -2,7 +2,7 @@
 
 | Phase | Status | Latest update |
 |---|---|---|
-| 1. Definition + data-source validation | COMPLETE | Payoff, DTE regimes, data sources and cost-model requirements frozen |
+| 1. Definition + data-source validation | COMPLETE / CORRECTED | Four-session DTE and return-to-flatline exit frozen from user clarification |
 | 2. Data acquisition + validation | IN PROGRESS | Acquisition script and manual GitHub Actions workflow implemented; local runtime cannot fetch external parquet data |
 | 3. Backtest engine + costs | NOT STARTED | |
 | 4. Strategy 1 | NOT STARTED | |
@@ -19,3 +19,6 @@ NSE confirms current NIFTY weekly expiry is Tuesday and the 2025 transition must
 
 ## Phase 2 current state
 The reproducible acquisition/backtest workflow is implemented. No empirical trade results are claimed yet because the current execution environment cannot download the licensed parquet dataset or dispatch the repository workflow.
+
+## Latest correction
+Primary entry is four trading sessions before expiry. Early exit requires the trade to first move above the flatline tolerance band and then return into that band before expiry day. No early exit is permitted on expiry day.
