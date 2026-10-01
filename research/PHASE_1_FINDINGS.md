@@ -3,18 +3,31 @@
 ## Completed
 1. Repository baseline and governance files created.
 2. Strategy ambiguity converted into explicit parameters.
-3. Expiry regime verified from NSE.
-4. Payoff algebra formalized.
-5. Intraday-data requirement confirmed.
-6. Candidate 1-minute data sources inventoried.
-7. Broker and statutory cost sources inventoried.
+3. User clarified DTE: **4 trading sessions**, not calendar days.
+4. For Tuesday expiry, entry is Wednesday at 10:00 IST.
+5. User supplied the intended payoff-chart structure.
+6. Early exit is based on P&L proximity to the horizontal expiry-payoff flatline, not proximity to maximum profit.
+7. Intraday option data requirement confirmed.
+8. Candidate 1-minute data sources inventoried.
+9. Broker and statutory cost sources inventoried.
 
-## Critical methodological findings
-- The payoff has a finite maximum-profit plateau between the two short strikes, with a tail loss that is unbounded in the adverse direction.
-- The plateau profit before costs is strike spacing minus the net entry debit or credit.
-- Close to the flatline is not a unique numerical trigger; 90%, 95% and 100% of the theoretical plateau are frozen sensitivity cases.
-- The user's 4 DTE rule cannot be applied identically across NIFTY's historical Thursday and current Tuesday weekly-expiry regimes without changing what DTE means.
-- Public intraday datasets located are OHLC-based and generally do not provide a historical bid/ask surface; execution assumptions must therefore be conservative.
+## Corrections to the previous interpretation
+
+The previous four-calendar-day interpretation was incorrect for this requested strategy and is superseded by four trading sessions.
+
+The previous 90/95/100%-of-maximum-profit exit rule is also superseded.
+
+The current exit rule is proximity to the payoff flatline.
+
+## Tolerance
+
+Because "close to" has no numerical threshold in the screenshot, test:
+- 2% of bump height
+- 5% of bump height
+- 10% of bump height
+
+The 5% case is the descriptive reference.
 
 ## Phase 1 exit criterion
-Definition, data requirements and cost-model requirements are sufficiently frozen to start Phase 2 implementation.
+
+The corrected strategy definition is frozen sufficiently to continue Phase 2.
