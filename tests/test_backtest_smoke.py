@@ -19,6 +19,7 @@ def test_sessions4_flatline_exit_smoke(tmp_path: Path):
         (datetime(2025, 8, 27, 10, 0), date(2025, 8, 27)),
         (datetime(2025, 8, 28, 10, 0), date(2025, 8, 28)),
         (datetime(2025, 8, 29, 10, 0), date(2025, 8, 29)),
+        (datetime(2025, 9, 1, 10, 0), date(2025, 9, 1)),
         (datetime(2025, 9, 2, 15, 29), expiry),
     ]:
         for strike in strikes:
@@ -34,6 +35,11 @@ def test_sessions4_flatline_exit_smoke(tmp_path: Path):
                         price = {80: 6.0, 75: 4.0, 70: 2.0}.get(strike, 1.0)
                     else:
                         price = {120: 1.4, 125: 1.0, 130: 0.4}.get(strike, 1.0)
+                elif ts.date() == date(2025, 9, 1):
+                    if opt == "PE":
+                        price = {80: 16.0, 75: 4.0, 70: 2.0}.get(strike, 1.0)
+                    else:
+                        price = {120: 7.0, 125: 1.0, 130: 0.4}.get(strike, 1.0)
                 elif ts.date() == date(2025, 8, 29):
                     if opt == "PE":
                         price = {80: 16.0, 75: 4.0, 70: 2.0}.get(strike, 1.0)
