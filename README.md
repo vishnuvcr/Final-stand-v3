@@ -36,3 +36,6 @@ The repository contains a manual GitHub Actions workflow that uses HF_TOKEN to d
 
 ## Latest strategy correction
 For Tuesday expiry, 4 DTE means Wednesday entry. The early exit is not a maximum-profit target: after the P&L enters the bump, the position is closed if P&L subsequently returns to the defined tolerance band around the expiry-payoff flatline before expiry day.
+
+## Latest strategy correction
+There is no prerequisite movement into the bump. The first qualifying flatline-proximity observation after entry is the exit.
