@@ -28,3 +28,6 @@ The uploaded payoff screenshot was used to confirm the intended geometry: horizo
 
 ## 2026-10-01 — Final flatline-exit clarification
 User clarified that the trade does NOT need to move toward or into the profit bump first. At any time after entry, if the current strategy P&L is sufficiently close to the payoff-chart flatline, exit immediately. If no such condition occurs before expiry day, hold to expiry.
+
+## 2026-10-01 — Empirical run completed
+The four-session DTE / immediate flatline-proximity rule was executed on historical 1-minute NIFTY data. The reference 5% tolerance run produced 36 qualifying trades per strategy. Robustness sweeps for 2%, 5%, 10% flatline tolerance and 0/0.05/0.10-point slippage were completed.
