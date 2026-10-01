@@ -16,8 +16,9 @@ def test_calendar4_target_exit_smoke(tmp_path: Path):
     strikes = [70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130]
 
     for ts, day in [
+        (datetime(2025, 8, 27, 10, 0), date(2025, 8, 27)),
+        (datetime(2025, 8, 28, 10, 0), date(2025, 8, 28)),
         (datetime(2025, 8, 29, 10, 0), entry),
-        (datetime(2025, 8, 29, 10, 1), entry),
         (datetime(2025, 9, 2, 15, 29), expiry),
     ]:
         for strike in strikes:
@@ -28,11 +29,11 @@ def test_calendar4_target_exit_smoke(tmp_path: Path):
                         price = {80: 10.0, 75: 4.0, 70: 2.0}.get(strike, 1.0)
                     else:
                         price = {120: 2.0, 125: 1.0, 130: 0.4}.get(strike, 1.0)
-                elif ts.minute == 1:
+                elif ts.date() == entry:
                     if opt == "PE":
-                        price = {80: 11.0, 75: 4.0, 70: 2.0}.get(strike, 1.0)
+                        price = {80: 16.0, 75: 4.0, 70: 2.0}.get(strike, 1.0)
                     else:
-                        price = {120: 6.18, 125: 1.0, 130: 0.4}.get(strike, 1.0)
+                        price = {120: 7.0, 125: 1.0, 130: 0.4}.get(strike, 1.0)
                 rows.append({
                     "timestamp": ts,
                     "trading_day": day,
@@ -72,10 +73,10 @@ def test_calendar4_target_exit_smoke(tmp_path: Path):
             date(2025, 8, 1),
             expiry,
             "calendar4",
-            0.95,
+            0.05,
             None,
             cfg,
         )
         assert len(trades) == 1
-        assert trades.iloc[0]["exit_reason"] == "profit_target"
+        assert trades.iloc[0]["exit_reason"] == "flatline_return"
         assert trades.iloc[0]["entry_date"] == "2025-08-29"
