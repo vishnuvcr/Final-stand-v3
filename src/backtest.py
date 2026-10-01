@@ -11,7 +11,7 @@ from src.strategy import RatioStrategy
 def historical_nifty_lot_size(expiry: date) -> int:
     # NSE Circular FAOP70616: weekly/monthly NIFTY contracts retained lot 75
     # through 23-Dec-2025; first revised weekly lot 65 was 06-Jan-2026.
-    if expiry <= date(2025, 12, 23):
+    if expiry <= date(2025, 12, 30):
         return 75
     if expiry >= date(2026, 1, 6):
         return 65
