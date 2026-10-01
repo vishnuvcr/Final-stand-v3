@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="480" viewBox="0 0 900 480">
+<rect width="100%" height="100%" fill="white"/>
+<text x="75" y="22" font-family="sans-serif" font-size="18" font-weight="bold">Trade-sequence drawdown — 5% flatline tolerance</text>
+<line x1="75" y1="35" x2="75" y2="425" stroke="#777"/>
+<line x1="75" y1="425" x2="875" y2="425" stroke="#777"/>
+<line x1="75" y1="61.9" x2="875" y2="61.9" stroke="#bbb" stroke-dasharray="5,5"/>
+<text x="8" y="40" font-family="sans-serif" font-size="12">2,329</text><text x="8" y="230" font-family="sans-serif" font-size="12">-14,558</text><text x="8" y="425" font-family="sans-serif" font-size="12">-31,445</text>
+<path d="M 75,61.9 L 97.9,61.9 L 120.7,61.9 L 143.6,171.3 L 166.4,146 L 189.3,136 L 212.1,158 L 235,130.2 L 257.9,108.7 L 280.7,88.9 L 303.6,69.6 L 326.4,61.9 L 349.3,61.9 L 372.1,61.9 L 395,61.9 L 417.9,61.9 L 440.7,106 L 463.6,78.1 L 486.4,61.9 L 509.3,61.9 L 532.1,61.9 L 555,61.9 L 577.9,61.9 L 600.7,231.9 L 623.6,92.2 L 646.4,157.2 L 669.3,398.1 L 692.1,157.3 L 715,61.9 L 737.9,61.9 L 760.7,61.9 L 783.6,61.9 L 806.4,61.9 L 829.3,330.5 L 852.1,257.3 L 875,178" fill="none" stroke="#1f77b4" stroke-width="2.5"/>
+<path d="M 75,61.9 L 97.9,61.9 L 120.7,61.9 L 143.6,61.9 L 166.4,120.4 L 189.3,111.1 L 212.1,75.4 L 235,61.9 L 257.9,61.9 L 280.7,61.9 L 303.6,61.9 L 326.4,61.9 L 349.3,61.9 L 372.1,61.9 L 395,61.9 L 417.9,61.9 L 440.7,61.9 L 463.6,61.9 L 486.4,61.9 L 509.3,61.9 L 532.1,61.9 L 555,61.9 L 577.9,61.9 L 600.7,61.9 L 623.6,61.9 L 646.4,61.9 L 669.3,61.9 L 692.1,61.9 L 715,61.9 L 737.9,359.9 L 760.7,314.7 L 783.6,248.8 L 806.4,181.5 L 829.3,130.7 L 852.1,61.9 L 875,61.9" fill="none" stroke="#d62728" stroke-width="2.5"/>
+<text x="75" y="465" font-family="sans-serif" font-size="12">Trade sequence (36 qualifying trades)</text><text x="650" y="22" font-family="sans-serif" font-size="12">Blue: Put ratio</text><text x="650" y="38" font-family="sans-serif" font-size="12">Red: Call ratio</text>
+</svg>
