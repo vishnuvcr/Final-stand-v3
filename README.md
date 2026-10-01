@@ -2,7 +2,7 @@
 
 ## Current status
 - Repository baseline initialized on 2026-10-01.
-- Research phase: Phase 1 complete; Phase 2 ready to start.
+- Research phase: Phase 2 in progress; reproducible acquisition/backtest workflow implemented.
 - Test requested: two 1:-1:-1 OTM ratio structures, entered at 4 DTE at 10:00 IST, with early exit near the payoff-chart maximum-profit plateau and expiry otherwise.
 - Working market assumption: NIFTY weekly index options, with OTM4/5/6 interpreted as the 4th/5th/6th listed OTM strikes from ATM. This is an explicit research assumption because the underlying was not specified.
 - A 1-minute NIFTY options data source has been selected for Phase 2; raw licensed data will be downloaded and cached in GitHub Actions rather than committed to this public repo.
@@ -16,7 +16,7 @@
 
 ## Phases
 1. Strategy definition and data validation — complete
-2. Data acquisition and quality validation — ready to start
+2. Data acquisition and quality validation — in progress
 3. Backtest engine and transaction-cost model — pending
 4. Strategy 1 backtest — pending
 5. Strategy 2 backtest — pending
@@ -30,3 +30,6 @@ The requested 10:00 entry and intraday profit-target exit require intraday optio
 NSE publishes official derivatives reports including historical F&O bhavcopy files, but the public daily bhavcopy is end-of-day and cannot reproduce the requested intraday exit path.
 ## Phase 1 result
 The strategy definition is frozen. The payoff has a maximum-profit plateau between the two short strikes and an unbounded adverse tail. The 4-DTE definition will be evaluated separately for the historical Thursday-expiry regime and the Tuesday-expiry regime.
+
+## Phase 2 result so far
+The repository contains a manual GitHub Actions workflow that uses HF_TOKEN to download/cache the selected 1-minute NIFTY options files, runs the strategy tests, and produces trade-level artifacts. Numeric backtest results are not yet claimed because the current runtime cannot perform the external parquet download or dispatch that workflow.
