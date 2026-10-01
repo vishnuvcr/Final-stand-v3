@@ -16,7 +16,7 @@
 
 ## Phases
 1. Strategy definition and data validation — complete
-2. Data acquisition and quality validation — in progress
+2. Data acquisition and quality validation — complete with coverage limitation
 3. Backtest engine and transaction-cost model — pending
 4. Strategy 1 backtest — pending
 5. Strategy 2 backtest — pending
@@ -39,3 +39,6 @@ For Tuesday expiry, 4 DTE means Wednesday entry. The early exit is not a maximum
 
 ## Latest strategy correction
 There is no prerequisite movement into the bump. The first qualifying flatline-proximity observation after entry is the exit.
+
+## Empirical result
+The executed 5% flatline-tolerance / 0.05-point-slippage run produced 36 qualifying trades per strategy through the 26-May-2026 expiry. Net P&L was ₹60,711.67 for Strategy 1 and ₹94,941.36 for Strategy 2. Robustness runs are stored in the research results file. The post-26-May source coverage is not yet sufficient to claim the originally requested full end date.
