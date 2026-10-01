@@ -187,7 +187,8 @@ def run_backtest(
             if not (0 <= flatline_tolerance <= 1):
                 raise ValueError("flatline_tolerance must be between 0 and 1.")
             tolerance_points = flatline_tolerance * bump_height
-            # Start monitoring strictly after the 10:00 entry bar.\n            path_prices = prices.loc[prices.index > entry_ts].copy()
+            # Start monitoring strictly after the 10:00 entry bar.
+            path_prices = prices.loc[prices.index > entry_ts].copy()
 
             # Target detection uses executable exit prices at each minute close.
             pnl = pd.Series(0.0, index=path_prices.index)
