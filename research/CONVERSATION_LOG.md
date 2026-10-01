@@ -14,3 +14,6 @@ Research interpretation:
 - OTM4/5/6 interpreted as 4th/5th/6th listed OTM strikes from ATM.
 - “Close to flatline” parameterized at 90%, 95% and 100% of theoretical maximum profit.
 - Minute-level option prices are required to test the stated early-exit rule.
+
+## Phase 2 progress
+The active branch implements the data acquisition workflow and deterministic backtest engine. The external data execution is pending; no hidden chain-of-thought is stored in this file.
