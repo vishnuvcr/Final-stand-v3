@@ -235,7 +235,7 @@ def run_backtest(
                 slippage_points_per_leg=cost_config.slippage_points_per_leg,
             )
             cost_rupees = _turnover_and_costs(entry_exec, exit_exec, legs, effective_lot_size, dated_cfg)
-            net_points = gross_points - (cost_rupees / lot_size if lot_size else 0.0)
+            net_points = gross_points - (cost_rupees / effective_lot_size if effective_lot_size else 0.0)
 
             trades.append({
                 "strategy": strategy.name,
