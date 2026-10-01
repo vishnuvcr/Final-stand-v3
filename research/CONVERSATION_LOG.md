@@ -31,3 +31,6 @@ User clarified that the trade does NOT need to move toward or into the profit bu
 
 ## 2026-10-01 — Empirical run completed
 The four-session DTE / immediate flatline-proximity rule was executed on historical 1-minute NIFTY data. The reference 5% tolerance run produced 36 qualifying trades per strategy. Robustness sweeps for 2%, 5%, 10% flatline tolerance and 0/0.05/0.10-point slippage were completed.
+
+## 2026-10-01 — Research completion
+Phases through the manuscript were completed. The current study stops with a usable empirical conclusion and explicit coverage/execution limitations. Further work is listed as future research rather than extending the current backtest indefinitely.
