@@ -17,3 +17,6 @@ Research interpretation:
 
 ## Phase 1 completion
 Formal payoff, expiry regimes, data source candidates and cost-model requirements were frozen. Only user-facing and research-step summaries are retained; hidden chain-of-thought is not stored.
+
+## Phase 2 progress
+Implemented the data acquisition script, deterministic backtest engine, payoff tests, synthetic smoke test, and manual workflow. The current runtime could not execute the external parquet download; this is logged rather than replaced with fabricated data.
