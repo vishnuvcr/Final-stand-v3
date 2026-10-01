@@ -33,3 +33,6 @@ The strategy definition is frozen. The payoff has a maximum-profit plateau betwe
 
 ## Phase 2 result so far
 The repository contains a manual GitHub Actions workflow that uses HF_TOKEN to download/cache the selected 1-minute NIFTY options files, runs the strategy tests, and produces trade-level artifacts. Numeric backtest results are not yet claimed because the current runtime cannot perform the external parquet download or dispatch that workflow.
+
+## Latest strategy correction
+For Tuesday expiry, 4 DTE means Wednesday entry. The early exit is not a maximum-profit target: after the P&L enters the bump, the position is closed if P&L subsequently returns to the defined tolerance band around the expiry-payoff flatline before expiry day.
