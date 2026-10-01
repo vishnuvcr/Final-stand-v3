@@ -1,30 +1,40 @@
 # Final Stand v3 — Options Strategy Research
 
 ## Current status
-- Repository baseline initialized on 2026-10-01.
-- Research phase: Strategy definition and data-source validation.
-- Test requested: two 1:-1:-1 OTM ratio structures, entered at 4 DTE at 10:00 IST, with early exit near the payoff-chart maximum-profit plateau and expiry otherwise.
-- Working market assumption: NIFTY weekly index options, with OTM4/5/6 interpreted as the 4th/5th/6th listed OTM strikes from ATM. This is an explicit research assumption because the underlying was not specified.
-- Intraday option data availability is the current gating item.
+- Active phase: Phase 2 — data acquisition and backtest implementation.
+- Phase 1 definition is complete and frozen.
+- Numeric historical performance is **not yet reported** because the current runtime cannot download/read the selected licensed parquet dataset and cannot dispatch the repository's GitHub Actions workflow.
+- No empirical result has been fabricated.
 
-## Research files
-- research/RESEARCH_PLAN.md
-- RESEARCH_RULES.md
-- research/STATUS.md
-- research/ERROR_LOG.md
-- research/CONVERSATION_LOG.md
+## Active phase branch
+[phase-2-data-backtest](https://github.com/vishnuvcr/Final-stand-v3/tree/phase-2-data-backtest)
 
-## Phases
-1. Strategy definition and data validation — in progress
-2. Data acquisition and quality validation — pending
-3. Backtest engine and transaction-cost model — pending
-4. Strategy 1 backtest — pending
-5. Strategy 2 backtest — pending
-6. Robustness / sensitivity analysis — pending
-7. Manuscript, charts, appendices, and final conclusions — pending
+Key active files:
+- [Research plan](research/RESEARCH_PLAN.md)
+- [Phase 2 findings](https://github.com/vishnuvcr/Final-stand-v3/blob/phase-2-data-backtest/research/PHASE_2_FINDINGS.md)
+- [Data specification](https://github.com/vishnuvcr/Final-stand-v3/blob/phase-2-data-backtest/research/PHASE_2_DATA_SPEC.md)
+- [Strategy definition](https://github.com/vishnuvcr/Final-stand-v3/blob/phase-2-data-backtest/research/STRATEGY_DEFINITION.md)
+- [Data-source review](https://github.com/vishnuvcr/Final-stand-v3/blob/phase-2-data-backtest/research/DATA_SOURCE_REVIEW.md)
+- [Error log](research/ERROR_LOG.md)
+- [Conversation log](research/CONVERSATION_LOG.md)
+- [Phase 2 workflow](https://github.com/vishnuvcr/Final-stand-v3/blob/phase-2-data-backtest/.github/workflows/phase-2-backtest.yml)
 
-## Important caveat
-The requested 10:00 entry and intraday profit-target exit require intraday option prices for the exact strikes in each historical trade. Daily NSE bhavcopy data alone is insufficient.
+## Strategy test definition
+1. Long OTM4 put, short OTM5 put, short OTM6 put.
+2. Long OTM4 call, short OTM5 call, short OTM6 call.
+3. Entry at 4 DTE, 10:00 IST.
+4. Exit when realized P&L reaches 90%, 95% or 100% of the theoretical maximum plateau, with 95% as the descriptive reference.
+5. Otherwise exit at 0 DTE/expiry.
+6. Execution costs and adverse slippage are explicit inputs.
 
-## Source note
-NSE publishes official derivatives reports including historical F&O bhavcopy files, but the public daily bhavcopy is end-of-day and cannot reproduce the requested intraday exit path.
+## Working market assumption
+Because the underlying was not specified, the implementation assumes NIFTY weekly index options. OTM4/5/6 means the 4th/5th/6th listed OTM strikes from the 10:00 ATM reference.
+
+## Phase structure
+1. Strategy definition and data validation — complete.
+2. Data acquisition and quality validation — in progress.
+3. Backtest engine and transaction-cost model — implemented on active Phase 2 branch; empirical completion pending data run.
+4. Strategy 1 backtest — pending.
+5. Strategy 2 backtest — pending.
+6. Robustness / sensitivity analysis — pending.
+7. Manuscript, charts, appendices, and final conclusions — pending.
