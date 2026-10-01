@@ -1,8 +1,6 @@
 name: Phase 6 - flatline tolerance robustness
 
 on:
-  push:
-    branches: [phase-2-data-backtest]
   workflow_dispatch:
 
 jobs:
