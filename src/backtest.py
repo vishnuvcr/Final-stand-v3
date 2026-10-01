@@ -123,7 +123,11 @@ def run_backtest(
     all_entries: set[date] = set()
 
     for path in option_files:
-        df0 = _prepare(pd.read_parquet(path, columns=["trading_day", "expiry"]))
+        df0 = pd.read_parquet(path, columns=["trading_day", "expiry"])
+        if df0.empty:
+            continue
+        df0["trading_day"] = pd.to_datetime(df0["trading_day"]).dt.date
+        df0["expiry"] = pd.to_datetime(df0["expiry"]).dt.date
         if df0.empty:
             continue
         for expiry in sorted(df0["expiry"].unique()):
