@@ -2,8 +2,8 @@
 
 | Phase | Status | Latest update |
 |---|---|---|
-| 1. Definition + data-source validation | IN PROGRESS | Strategy ambiguity documented; NIFTY working assumption recorded; intraday data requirement confirmed |
-| 2. Data acquisition + validation | NOT STARTED | |
+| 1. Definition + data-source validation | COMPLETE | Payoff, DTE regimes, data sources and cost-model requirements frozen |
+| 2. Data acquisition + validation | READY TO START | Primary HF 1-minute NIFTY dataset selected; raw data will remain outside the public repo |
 | 3. Backtest engine + costs | NOT STARTED | |
 | 4. Strategy 1 | NOT STARTED | |
 | 5. Strategy 2 | NOT STARTED | |
@@ -14,3 +14,5 @@
 - With equal strike spacing, the 1:-1:-1 structure has a finite expiry maximum-profit plateau between the two short strikes.
 - “Close to the flatline” is threshold-dependent; 90%, 95% and 100% of theoretical plateau profit are designated sensitivity cases.
 - Minute-level option data is required for the requested early-exit rule.
+## Phase 1 completion note
+NSE confirms current NIFTY weekly expiry is Tuesday and the 2025 transition must be treated separately from earlier Thursday expiries. Target thresholds are frozen at 90%, 95% and 100% of theoretical maximum profit.
