@@ -17,3 +17,5 @@
 | 2026-10-01 | NIFTY lot-size boundary | Old 75-lot regime was initially stopped at 23-Dec-2025 | 30-Dec-2025 expiry failed the cost model | Extended 75-lot regime through 30-Dec-2025; 65 from 06-Jan-2026 |
 | 2026-10-01 | Data coverage | Executed spot/option sample produced no qualifying trades after 26-May-2026 despite later-dated source files existing | Full requested date range could not be claimed | Report the empirical sample through 26-May-2026 and exclude later dates pending a coverage audit |
 | 2026-10-01 | Summary metric | Old summary still called the exit statistic target_hit_rate | It reported zero even though flatline exits occurred | Replaced with flatline_exit_rate |
+
+| 2026-10-01 | Phase 7 coverage audit | Later-dated NIFTY option files exist in the source repository, but the executed spot/option path produced no qualifying trades after 26-May-2026 | Full requested date range cannot be represented without resolving source coverage | Stopped the current research at a usable conclusion and documented coverage as a limitation/future-data task |
