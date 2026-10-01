@@ -100,7 +100,7 @@ def run_backtest(
     start: date,
     end: date,
     dte_mode: str,
-    target_fraction: float,
+    flatline_tolerance: float,
     lot_size: int | None,
     cost_config: CostConfig,
 ) -> pd.DataFrame:
@@ -165,7 +165,11 @@ def run_backtest(
                 entry_exec[strike] = ep[strike] + (adjustment if sign == 1 else -adjustment)
 
             max_profit = strategy.max_profit_points(entry_exec, legs)
-            target = strategy.target_points(entry_exec, legs, target_fraction)
+            flatline = strategy.flatline_points(entry_exec, legs)
+            bump_height = max_profit - flatline
+            if not (0 <= flatline_tolerance <= 1):
+                raise ValueError("flatline_tolerance must be between 0 and 1.")
+            tolerance_points = flatline_tolerance * bump_height
             path_prices = prices.loc[entry_ts:].copy()
 
             # Target detection uses executable exit prices at each minute close.
@@ -174,21 +178,34 @@ def run_backtest(
                 adjustment = cost_config.slippage_points_per_leg
                 exit_exec = path_prices[strike] - adjustment if sign == 1 else path_prices[strike] + adjustment
                 pnl += sign * (exit_exec - entry_exec[strike])
-            target_hit = pnl[pnl >= target] if max_profit > 0 else pd.Series(dtype=float)
 
-            if not target_hit.empty:
-                exit_ts = target_hit.index[0]
-                exit_reason = "profit_target"
+            # Exit only after the trade has first moved into the bump,
+            # then returned to the flatline tolerance band. Never trigger
+            # this early exit on expiry day.
+            pre_expiry = path_prices[path_prices.index.date < expiry]
+            if bump_height > 0 and not pre_expiry.empty:
+                above_band = pnl > (flatline + tolerance_points)
+                if above_band.any():
+                    first_bump_ts = above_band[above_band].index[0]
+                    return_band = pnl.loc[first_bump_ts:]
+                    return_band = return_band[
+                        (return_band.index.date < expiry) &
+                        (return_band <= (flatline + tolerance_points))
+                    ]
+                else:
+                    return_band = pd.Series(dtype=float)
             else:
-                path_prices = prices.loc[entry_ts:]
+                return_band = pd.Series(dtype=float)
+
+            if not return_band.empty:
+                exit_ts = return_band.index[0]
+                exit_reason = "flatline_return"
+            else:
                 expiry_rows = path_prices[path_prices.index.date == expiry]
                 if expiry_rows.empty:
                     continue
                 exit_ts = expiry_rows.index[-1]
                 exit_reason = "expiry"
-                pnl = pd.Series(0.0, index=path_prices.index)
-                for strike, sign in legs:
-                    pnl += sign * (path_prices[strike] - entry_adj[strike])
 
             xp = {k: float(path_prices.loc[exit_ts, k]) for k in leg_strikes}
             exit_exec = {}
@@ -219,7 +236,8 @@ def run_backtest(
                 "entry_cashflow_points": strategy.entry_cashflow(ep, legs),
                 "flatline_points": strategy.flatline_points(ep, legs),
                 "max_profit_points": max_profit,
-                "target_points": target,
+                "flatline_tolerance_fraction": flatline_tolerance,
+                "flatline_tolerance_points": tolerance_points,
                 "gross_pnl_points": gross_points,
                 "net_pnl_points": net_points,
                 "cost_rupees": cost_rupees,
