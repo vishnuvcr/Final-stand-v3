@@ -8,7 +8,7 @@ pytest.importorskip("pyarrow")
 from src.backtest import CostConfig, run_backtest
 
 
-def test_calendar4_target_exit_smoke(tmp_path: Path):
+def test_sessions4_flatline_exit_smoke(tmp_path: Path):
     expiry = date(2025, 9, 2)
     entry = date(2025, 8, 27)
 
