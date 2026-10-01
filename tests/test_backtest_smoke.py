@@ -2,6 +2,8 @@ from datetime import date, datetime, time
 from pathlib import Path
 
 import pandas as pd
+import pytest
+pytest.importorskip("pyarrow")
 
 from src.backtest import CostConfig, run_backtest
 
