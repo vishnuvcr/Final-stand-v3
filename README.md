@@ -1,7 +1,7 @@
 # Final Stand v3 — Options Strategy Research
 
 ## Current status
-- Active phase: Phase 2 — data acquisition and backtest implementation.
+- Active phase: Phase 2 — data acquisition and backtest implementation, using the corrected four-trading-session DTE and return-to-flatline exit definition.
 - Phase 1 definition is complete and frozen.
 - Numeric historical performance is **not yet reported** because the current runtime cannot download/read the selected licensed parquet dataset and cannot dispatch the repository's GitHub Actions workflow.
 - No empirical result has been fabricated.
@@ -38,3 +38,6 @@ Because the underlying was not specified, the implementation assumes NIFTY weekl
 5. Strategy 2 backtest — pending.
 6. Robustness / sensitivity analysis — pending.
 7. Manuscript, charts, appendices, and final conclusions — pending.
+
+## User-confirmed correction
+For a Tuesday expiry, 4 DTE means **Wednesday 10:00 IST**, counting four trading sessions to Tuesday expiry. The early exit is triggered only after P&L has entered the profit bump and then returns close to the horizontal expiry-payoff flatline. The position is otherwise held to expiry.
