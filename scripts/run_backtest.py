@@ -13,7 +13,7 @@ def main():
     p.add_argument("--start", required=True)
     p.add_argument("--end", required=True)
     p.add_argument("--dte-mode", default="calendar4", choices=["calendar4", "sessions4"])
-    p.add_argument("--target-fraction", type=float, default=0.95)
+    p.add_argument("--flatline-tolerance", type=float, default=0.05)
     p.add_argument("--lot-size", type=int, default=0, help="0 means point P&L only")
     p.add_argument("--brokerage", type=float, default=10.0)
     p.add_argument("--stt", type=float, default=0.0015)
@@ -54,7 +54,7 @@ def main():
             start,
             end,
             a.dte_mode,
-            a.target_fraction,
+            a.flatline_tolerance,
             lot,
             costs,
         )
