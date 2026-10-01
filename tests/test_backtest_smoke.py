@@ -10,7 +10,7 @@ from src.backtest import CostConfig, run_backtest
 
 def test_calendar4_target_exit_smoke(tmp_path: Path):
     expiry = date(2025, 9, 2)
-    entry = date(2025, 8, 29)
+    entry = date(2025, 8, 27)
 
     rows = []
     strikes = [70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130]
@@ -18,7 +18,7 @@ def test_calendar4_target_exit_smoke(tmp_path: Path):
     for ts, day in [
         (datetime(2025, 8, 27, 10, 0), date(2025, 8, 27)),
         (datetime(2025, 8, 28, 10, 0), date(2025, 8, 28)),
-        (datetime(2025, 8, 29, 10, 0), entry),
+        (datetime(2025, 8, 29, 10, 0), date(2025, 8, 29)),
         (datetime(2025, 9, 2, 15, 29), expiry),
     ]:
         for strike in strikes:
@@ -29,7 +29,7 @@ def test_calendar4_target_exit_smoke(tmp_path: Path):
                         price = {80: 10.0, 75: 4.0, 70: 2.0}.get(strike, 1.0)
                     else:
                         price = {120: 2.0, 125: 1.0, 130: 0.4}.get(strike, 1.0)
-                elif ts.date() == entry:
+                elif ts.date() == date(2025, 8, 29):
                     if opt == "PE":
                         price = {80: 16.0, 75: 4.0, 70: 2.0}.get(strike, 1.0)
                     else:
